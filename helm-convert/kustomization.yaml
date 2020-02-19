@@ -1,0 +1,29 @@
+# Labels to add to all resources and selectors.
+commonLabels:
+  app.kubernetes.io/instance: chaos-mesh
+  app.kubernetes.io/managed-by: Tiller
+  app.kubernetes.io/name: chaos-mesh
+  helm.sh/chart: chaos-mesh-dev
+
+# Images modify the tags for images without
+# creating patches.
+images:
+- name: bitnami/kubectl
+  newTag: latest
+- name: pingcap/chaos-daemon
+  newTag: latest
+- name: pingcap/chaos-mesh
+  newTag: latest
+
+# List of resource files that kustomize reads, modifies
+# and emits as a YAML string
+resources:
+- chaos-controller-manager-deploy.yaml
+- chaos-controller-manager-sa.yaml
+- chaos-daemon-ds.yaml
+- chaos-mesh-controller-manager-svc.yaml
+- chaos-mesh:chaos-controller-manager-clusterrole.yaml
+- chaos-mesh:chaos-controller-manager-crb.yaml
+- webhook-certs-job-job.yaml
+- webhook-del-job.yaml
+- webhook-mw-job-job.yaml

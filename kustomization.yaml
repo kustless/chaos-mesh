@@ -1,0 +1,26 @@
+# Labels to add to all resources and selectors.
+commonLabels:
+  app.kubernetes.io/managed-by: kustomize
+
+# Images modify the tags for images without
+# creating patches.
+images:
+- name: bitnami/kubectl
+  newTag: latest
+- name: pingcap/chaos-daemon
+  newTag: latest
+- name: pingcap/chaos-mesh
+  newTag: latest
+
+# List of resource files that kustomize reads, modifies
+# and emits as a YAML string
+resources:
+- helm-convert # converted from @pingcap/chaos-mesh/helm
+- manifests/crd.yaml # copied from @pingcap/chaos-mesh/manifests
+
+# It should be included as CRD, but there seems a bug
+# Error: loading CRDs [manifests/crd.yaml]: unable to parse open API definition
+#  from 'manifests/crd.yaml': error unmarshaling JSON: while decoding JSON:
+#  json: cannot unmarshal string into Go value of type common.OpenAPIDefinition
+# CRDs:
+# - manifests/crd.yaml # copied from @pingcap/chaos-mesh/manifests

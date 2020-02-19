@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook-del
+  name: webhook-del
+spec:
+  template:
+    metadata:
+      name: webhook-del
+    spec:
+      containers:
+      - command:
+        - sh
+        - -c
+        - |
+          set -e
+          kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io chaos-mesh-sidecar-injector || true // Auto Delete mutatingwebhookconfigurations
+          kubectl delete secrets -n default webhook-certs || true
+        image: bitnami/kubectl:latest
+        imagePullPolicy: IfNotPresent
+        name: chaos-mesh-job-del
+      restartPolicy: Never
+      serviceAccountName: chaos-controller-manager

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: controller-manager
+  name: chaos-controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: controller-manager
+      app.kubernetes.io/instance: chaos-mesh
+      app.kubernetes.io/name: chaos-mesh
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: controller-manager
+        app.kubernetes.io/instance: chaos-mesh
+        app.kubernetes.io/name: chaos-mesh
+    spec:
+      containers:
+      - command:
+        - /usr/local/bin/chaos-controller-manager
+        - -configmap-labels=app.kubernetes.io/component=webhook
+        - -conf=/etc/webhook/conf
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: TZ
+          value: UTC
+        - name: CHAOS_DAEMON_PORT
+          value: "31767"
+        image: pingcap/chaos-mesh:latest
+        imagePullPolicy: Always
+        name: chaos-mesh
+        ports:
+        - containerPort: 9443
+          name: webhook
+        - containerPort: 10080
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /etc/webhook/certs
+          name: webhook-certs
+          readOnly: true
+      serviceAccount: chaos-controller-manager
+      volumes:
+      - name: webhook-certs
+        secret:
+          secretName: webhook-certs

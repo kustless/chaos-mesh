@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/component: chaos-daemon
+  name: chaos-daemon
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: chaos-daemon
+      app.kubernetes.io/instance: chaos-mesh
+      app.kubernetes.io/name: chaos-mesh
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: chaos-daemon
+        app.kubernetes.io/instance: chaos-mesh
+        app.kubernetes.io/name: chaos-mesh
+    spec:
+      containers:
+      - command:
+        - /usr/local/bin/chaos-daemon
+        - --runtime
+        - docker
+        - --http-port
+        - "31766"
+        - --grpc-port
+        - "31767"
+        image: pingcap/chaos-daemon:latest
+        imagePullPolicy: Always
+        name: chaos-daemon
+        ports:
+        - containerPort: 31767
+          hostPort: 31767
+          name: grpc
+        - containerPort: 31766
+          name: http
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+          privileged: true
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: socket-path
+      hostIPC: true
+      hostPID: true
+      volumes:
+      - hostPath:
+          path: /var/run/docker.sock
+        name: socket-path

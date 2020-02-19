@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: controller-manager
+  name: chaos-mesh-controller-manager
+spec:
+  ports:
+  - name: http
+    port: 10080
+    protocol: TCP
+    targetPort: http
+  - name: webhook
+    port: 443
+    protocol: TCP
+    targetPort: webhook
+  selector:
+    app.kubernetes.io/component: controller-manager
+    app.kubernetes.io/instance: chaos-mesh
+  type: ClusterIP
