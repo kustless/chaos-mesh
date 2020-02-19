@@ -1,3 +1,6 @@
+# Default namespace for resources
+namespace: chaos-mesh
+
 # Labels to add to all resources and selectors.
 commonLabels:
   app.kubernetes.io/managed-by: kustomize
