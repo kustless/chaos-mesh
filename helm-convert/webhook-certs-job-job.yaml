@@ -17,7 +17,7 @@ spec:
           set -e
           K8S_SERVICE=chaos-mesh-controller-manager
           K8S_SECRET=webhook-certs
-          K8S_NAMESPACE=${POD_NAMESPACE}
+          K8S_NAMESPACE=${POD_NAMESPACE:-default}
 
           # test if secret already exists
           certs=$(kubectl get secret ${K8S_SECRET} --ignore-not-found -n ${K8S_NAMESPACE} -o name)
