@@ -15,7 +15,7 @@ spec:
         - -c
         - |
           set -e
-          kubectl delete secrets -n default chaos-mesh-webhook-certs || true
+          kubectl delete secrets -n ${POD_NAMESPACE:-default} chaos-mesh-webhook-certs || true
         image: bitnami/kubectl:latest
         imagePullPolicy: IfNotPresent
         name: chaos-mesh-job-del

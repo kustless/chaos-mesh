@@ -15,7 +15,7 @@ spec:
         - -c
         - |
           set -e
-          K8S_NAMESPACE=default
+          K8S_NAMESPACE=${POD_NAMESPACE:-default}
           CA_BUNDLE=$(kubectl get configmap -n kube-system extension-apiserver-authentication -o=jsonpath='{.data.client-ca-file}' | base64 | tr -d '\n')
 
           if [ ! $CA_BUNDLE ]; then
