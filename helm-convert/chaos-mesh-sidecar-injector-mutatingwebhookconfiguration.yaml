@@ -1,0 +1,117 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  labels:
+    app.kubernetes.io/component: admission-webhook
+  name: chaos-mesh-sidecar-injector
+webhooks:
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /inject-v1-pod
+  failurePolicy: Ignore
+  name: admission-webhook.pingcap.com
+  namespaceSelector:
+    matchLabels:
+      admission-webhook: enabled
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /mutate-pingcap-com-v1alpha1-podchaos
+  failurePolicy: Fail
+  name: mpodchaos.kb.io
+  rules:
+  - apiGroups:
+    - pingcap.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - podchaos
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /mutate-pingcap-com-v1alpha1-iochaos
+  failurePolicy: Fail
+  name: miochaos.kb.io
+  rules:
+  - apiGroups:
+    - pingcap.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - iochaos
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /mutate-pingcap-com-v1alpha1-timechaos
+  failurePolicy: Fail
+  name: mtimechaos.kb.io
+  rules:
+  - apiGroups:
+    - pingcap.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - timechaos
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /mutate-pingcap-com-v1alpha1-networkchaos
+  failurePolicy: Fail
+  name: mnetworkchaos.kb.io
+  rules:
+  - apiGroups:
+    - pingcap.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - networkchaos
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: chaos-mesh-controller-manager
+      namespace: default
+      path: /mutate-pingcap-com-v1alpha1-kernelchaos
+  failurePolicy: Fail
+  name: mkernelchaos.kb.io
+  rules:
+  - apiGroups:
+    - pingcap.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - kernelchaos

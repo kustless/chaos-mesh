@@ -32,6 +32,8 @@ spec:
           value: UTC
         - name: CHAOS_DAEMON_PORT
           value: "31767"
+        - name: BPFKI_PORT
+          value: "50051"
         image: pingcap/chaos-mesh:latest
         imagePullPolicy: Always
         name: chaos-mesh
@@ -41,12 +43,9 @@ spec:
         - containerPort: 10080
           name: http
         resources:
-          limits:
-            cpu: 500m
-            memory: 1024Mi
           requests:
-            cpu: 250m
-            memory: 512Mi
+            cpu: 25m
+            memory: 256Mi
         volumeMounts:
         - mountPath: /etc/webhook/certs
           name: webhook-certs
@@ -55,4 +54,4 @@ spec:
       volumes:
       - name: webhook-certs
         secret:
-          secretName: webhook-certs
+          secretName: chaos-mesh-webhook-certs

@@ -22,6 +22,8 @@ resources:
 - chaos-controller-manager-sa.yaml
 - chaos-daemon-ds.yaml
 - chaos-mesh-controller-manager-svc.yaml
+- chaos-mesh-sidecar-injector-mutatingwebhookconfiguration.yaml
+- chaos-mesh-validation-validatingwebhookconfiguration.yaml
 - chaos-mesh:chaos-controller-manager-clusterrole.yaml
 - chaos-mesh:chaos-controller-manager-crb.yaml
 - webhook-certs-job-job.yaml

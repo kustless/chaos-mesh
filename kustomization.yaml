@@ -27,3 +27,59 @@ resources:
 #  json: cannot unmarshal string into Go value of type common.OpenAPIDefinition
 # CRDs:
 # - manifests/crd.yaml # copied from @pingcap/chaos-mesh/manifests
+
+patches:
+- target:
+    kind: Job
+    name: webhook-certs-job
+  patch: |-
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: dummy
+    spec:
+      template:
+        spec:
+          containers:
+          - name: chaos-mesh-job-certs
+            env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+- target:
+    kind: Job
+    name:  webhook-del
+  patch: |-
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: dummy
+    spec:
+      template:
+        spec:
+          containers:
+          - name: chaos-mesh-job-del
+            env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+- target:
+    kind: Job
+    name: webhook-mw-job
+  patch: |-
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: dummy
+    spec:
+      template:
+        spec:
+          containers:
+          - name: chaos-mesh-job-mw
+            env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace

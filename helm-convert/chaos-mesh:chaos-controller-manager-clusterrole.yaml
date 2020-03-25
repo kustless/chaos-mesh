@@ -120,6 +120,7 @@ rules:
   - admissionregistration.k8s.io
   resources:
   - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
   verbs:
   - get
   - create
@@ -133,5 +134,6 @@ rules:
   - networkchaos
   - iochaos
   - timechaos
+  - kernelchaos
   verbs:
   - '*'
